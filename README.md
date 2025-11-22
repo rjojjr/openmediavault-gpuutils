@@ -2,27 +2,31 @@
 
 This project is based on and inspired by [routmoute's openmediavault-nvidiastats](https://github.com/routmoute/openmediavault-nvidiastats).
 
-This OpenMediaVault plugin adds dashboard widgets and management tools for AMD and Nvidia GPU devices.
+This OpenMediaVault plugin adds dashboard widgets and management interfaces for AMD(in the near future) and Nvidia GPU devices.
 
 ## Build
 
-You can build and package this plugin with the following commands:
+You can build and package this plugin as a `.deb` package with the following commands(ran from project root):
 
 ```bash
 debuild -us -uc
 cd debian
 dpkg-deb --build openmediavault-gpuutils
+
+# OR
+
+bash ./build
 ```
 
 ## Installation
 
-Install the deb package using `apt`:
+Install the `.deb` package using `apt`:
 
 ```bash
 apt install ./openmediavault-gpuutils.deb
 ```
 
-## Uninstall
+### Uninstall
 
 ```bash
 apt remove openmediavault-gpuutils
