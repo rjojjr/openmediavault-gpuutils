@@ -3,7 +3,7 @@
 SCRIPT_LOCATION="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo 'Cleaning up build artifacts...'
-cd "$SCRIPT_LOCATION"
+cd "$SCRIPT_LOCATION" || (echo 'Failed to find project root directory' && exit 1)
 rm -rf debian/.debhelper
 rm -rf debian/openmediavault-*
 rm -f debian/debhelper-build-stamp
