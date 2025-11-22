@@ -1,10 +1,10 @@
 <?php
 
-class OMVRpcServiceNvidiaStats extends \OMV\Rpc\ServiceAbstract
+class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
 {
     public function getName()
     {
-        return "NvidiaStats";
+        return "NvidiaUtil";
     }
 
     public function initialize()

@@ -14,7 +14,7 @@ data:
     maxHeight: "150px"
     maxWidth: "150px"
     request:
-      service: NvidiaStats
+      service: NvidiaUtil
       method: gpupowerutil
       transform:
         gpuPowerRemaining: '{{ gpuPowerLimit - gpuPowerDraw }}'

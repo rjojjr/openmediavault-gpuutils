@@ -16,7 +16,7 @@ data:
     max: 100
     displayValue: true
     request:
-      service: NvidiaStats
+      service: NvidiaUtil
       method: gpuutil
     label:
       formatter: template

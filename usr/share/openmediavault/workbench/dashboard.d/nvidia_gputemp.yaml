@@ -16,7 +16,7 @@ data:
     max: 150
     displayValue: true
     request:
-      service: NvidiaStats
+      service: NvidiaUtil
       method: gputemp
     label:
       formatter: template
