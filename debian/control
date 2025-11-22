@@ -1,4 +1,4 @@
-Source: openmediavault-nvidiastats
+Source: openmediavault-gpuutils
 Section: net
 XB-Plugin-Section: filesystems
 Priority: optional
@@ -7,8 +7,8 @@ Build-Depends: debhelper (>= 13)
 Standards-Version: 4.3.0
 Homepage: http://omv-extras.org/
 
-Package: openmediavault-nvidiastats
+Package: openmediavault-gpuutils
 Architecture: all
 Depends: openmediavault (>= 7),
          ${misc:Depends}
-Description: nvidia statistics plugin for openmediavault
+Description: GPU statistics and parameter management plugin for openmediavault
