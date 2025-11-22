@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SCRIPT_LOCATION="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo 'Building and packaging plugin...'
+
+cd "$SCRIPT_LOCATION"
+
+debuild -us -uc
+
+cd debian || (echo 'Failed to find to .debian/ directory' && exit 1)
+
+dpkg-deb --build openmediavault-gpuutils
+
+echo 'Build and package plugin COMPLETE'
