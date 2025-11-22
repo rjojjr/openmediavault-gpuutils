@@ -17,11 +17,11 @@ data:
     displayValue: true
     request:
       service: NvidiaUtil
-      method: gputemp
+      method: getGpuTemp
     label:
       formatter: template
       formatterConfig: "{{ value | tofixed(1) }} C"
     dataConfig:
       - label: _("Temp")
-        prop: gputemp
+        prop: gpuTemp
         backgroundColor: "#4cd964"

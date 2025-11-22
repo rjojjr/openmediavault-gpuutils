@@ -9,13 +9,13 @@ class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
 
     public function initialize()
     {
-        $this->registerMethod("gputemp");
-        $this->registerMethod("gpuutil");
-        $this->registerMethod("gpumemutil");
-        $this->registerMethod("gpupowerutil");
+        $this->registerMethod("getGpuTemp");
+        $this->registerMethod("getGpuUtil");
+        $this->registerMethod("getGpuMemUtil");
+        $this->registerMethod("getGpuPowerUtil");
     }
 
-    public function gputemp($param, $context)
+    public function getGpuTemp($param, $context)
     {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);
@@ -25,11 +25,11 @@ class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
         $cmd = new \OMV\System\Process($gpuTemp);
         $cmd->execute($output, $exitStatus);
         return [
-            "gputemp" => intval($output[0])
+            "gpuTemp" => intval($output[0])
         ];
     }
 
-    public function gpuutil($param, $context)
+    public function getGpuUtil($param, $context)
     {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);
@@ -39,11 +39,11 @@ class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
         $cmd = new \OMV\System\Process($gpuUtil);
         $cmd->execute($output, $exitStatus);
         return [
-            "gpuutil" => intval($output[0])
+            "gpuUtil" => intval($output[0])
         ];
     }
 
-    public function gpupowerutil($param, $context)
+    public function getGpuPowerUtil($param, $context)
     {
         $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);
         $gpuUtil = \OMV\Environment::get("OMV_NVIDIA_GPU_POWER_COMMAND",
@@ -57,7 +57,7 @@ class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
         ];
     }
 
-    public function gpumemutil($param, $context)
+    public function getGpuMemUtil($param, $context)
     {
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);

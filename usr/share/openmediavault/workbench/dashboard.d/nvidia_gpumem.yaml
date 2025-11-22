@@ -15,7 +15,7 @@ data:
     maxWidth: "150px"
     request:
       service: NvidiaUtil
-      method: gpumemutil
+      method: getGpuMemUtil
       transform:
         gpuMemUsed: '{{ gpuMemTotal - gpuMemAvailable }}'
     label:

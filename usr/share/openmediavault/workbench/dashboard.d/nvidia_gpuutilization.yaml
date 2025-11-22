@@ -17,11 +17,11 @@ data:
     displayValue: true
     request:
       service: NvidiaUtil
-      method: gpuutil
+      method: getGpuUtil
     label:
       formatter: template
       formatterConfig: "{{ value | tofixed(1) }}%"
     dataConfig:
       - label: _("Utilization")
-        prop: gpuutil
+        prop: gpuUtil
         backgroundColor: "#5dacdf"
