@@ -1,0 +1,31 @@
+version: "1.0"
+type: dashboard-widget
+data:
+  id: 6dc16d3e-a9bb-4ba9-a916-5dfb426dd97f
+  permissions:
+    role:
+      - admin
+      - user
+  title: _("Nvidia GPU Power")
+  type: chart
+  reloadPeriod: 5000
+  chart:
+    type: advanced-doughnut
+    maxHeight: "150px"
+    maxWidth: "150px"
+    request:
+      service: NvidiaStats
+      method: gpupowerutil
+      transform:
+        gpuPowerRemaining: '{{ gpuPowerLimit - gpuPowerDraw }}'
+    label:
+      display: true
+      formatter: template
+      formatterConfig: "{{ value }}W"
+    dataConfig:
+      - label: _("Used")
+        prop: gpuPowerDraw
+        backgroundColor: "#ff3b30"
+      - label: _("Available")
+        prop: gpuPowerRemaining
+        backgroundColor: "#4cd964"
