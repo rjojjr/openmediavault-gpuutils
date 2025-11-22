@@ -1,0 +1,7 @@
+/debian/debhelper-build-stamp
+/debian/files
+/debian/openmediavault-nvidiastats-1.2.deb
+/debian/openmediavault-nvidiastats.substvars
+/debian/openmediavault-nvidiastats/
+/debian/.debhelper/
+/.idea/
