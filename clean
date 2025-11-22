@@ -1,6 +1,5 @@
 #!/bin/sh
 
-CURRENT_LOCATION="$PWD"
 SCRIPT_LOCATION="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo 'Cleaning up build artifacts...'
@@ -11,5 +10,4 @@ rm -f debian/debhelper-build-stamp
 rm -f debian/files
 rm -f debian/*.substvars
 rm -f debian/*.deb
-cd "$CURRENT_LOCATION"
 echo 'Build artifacts cleaned up successfully'
