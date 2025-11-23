@@ -1,3 +1,9 @@
+openmediavault-gpuutils (1.0.1) stable; urgency=low
+
+  * Add Nvidia fan utilization dashboard widget
+
+ -- rjojjr <rjojjr91@live.com>  Sun, 23 Nov 2025 18:00:00 +0000
+
 openmediavault-gpuutils (1.0.0) stable; urgency=low
 
   * Initial release
