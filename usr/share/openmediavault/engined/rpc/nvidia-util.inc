@@ -13,6 +13,7 @@ class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
         $this->registerMethod("getGpuUtil");
         $this->registerMethod("getGpuMemUtil");
         $this->registerMethod("getGpuPowerUtil");
+        $this->registerMethod("getGpuFanUtil");
     }
 
     public function getGpuTemp($param, $context)
@@ -46,9 +47,9 @@ class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
     public function getGpuPowerUtil($param, $context)
     {
         $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);
-        $gpuUtil = \OMV\Environment::get("OMV_NVIDIA_GPU_POWER_COMMAND",
+        $gpuPowerUtil = \OMV\Environment::get("OMV_NVIDIA_GPU_POWER_COMMAND",
             "nvidia-smi --query-gpu=power.draw,power.limit --format=csv,noheader,nounits");
-        $cmd = new \OMV\System\Process($gpuUtil);
+        $cmd = new \OMV\System\Process($gpuPowerUtil);
         $cmd->execute($output, $exitStatus);
         $splittedOutput = explode(" ", $output[0]);
         return [
@@ -70,6 +71,21 @@ class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
         return [
             "gpuMemTotal" => intval($splittedOutput[0])*1048576, // 1048576 to convert MiB to Bytes
             "gpuMemAvailable" => intval($splittedOutput[1])*1048576
+        ];
+    }
+
+    public function getGpuFanUtil($param, $context)
+    {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);
+        // get cpu temp command and divisor number
+        $gpuFanUtil = \OMV\Environment::get("OMV_NVIDIA_GPU_FAN_UTIL_COMMAND",
+            "nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits");
+        $cmd = new \OMV\System\Process($gpuFanUtil);
+        $cmd->execute($output, $exitStatus);
+        $splittedOutput = explode(" ", $output[0]);
+        return [
+            "gpuFanUtil" => intval($splittedOutput[0]),
         ];
     }
 }
