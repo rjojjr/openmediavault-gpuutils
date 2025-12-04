@@ -1,7 +1,7 @@
 version: "1.0"
 type: dashboard-widget
 data:
-  id: 4a59b9ed-c50c-44ea-b385-a23a806d595e
+  id: 6944e10f-7422-44e6-b10b-111d2a801fab
   permissions:
     role:
       - admin
@@ -24,3 +24,7 @@ data:
         prop: gpuMem
       - label: "Fan Speed"
         prop: gpuFan
+      - label: "Temp"
+        formatter: template
+        formatterConfig: "{{ value | tofixed(1) }} C"
+        prop: gpuTemp
