@@ -1,0 +1,27 @@
+version: "1.0"
+type: dashboard-widget
+data:
+  id: 4a59b9ed-c50c-44ea-b385-a23a806d595e
+  permissions:
+    role:
+      - admin
+      - user
+  title: _("Nvidia GPU Utilization")
+  type: chart
+  reloadPeriod: 5000
+  chart:
+    type: gauge
+    maxHeight: "150px"
+    min: 0
+    max: 100
+    displayValue: true
+    request:
+      service: NvidiaUtil
+      method: getGpuUtil
+    label:
+      formatter: template
+      formatterConfig: "{{ value | tofixed(1) }}%"
+    dataConfig:
+      - label: _("Utilization")
+        prop: gpuUtil
+        backgroundColor: "#5dacdf"
