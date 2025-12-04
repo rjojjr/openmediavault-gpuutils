@@ -1,18 +1,18 @@
 <?php
 
-class OMVRpcServiceNvidiaUtil extends OMVRpcServiceAbstract
+class OMVRpcServiceNvidiaUtil extends \OMV\Rpc\ServiceAbstract
 {
-    protected function loadConfigFile($filename)
-    {
-        $configFilePath = "/usr/share/openmediavault/workbench/dashboard.d/" . $filename;
-        return yaml_parse_file($configFilePath);
-    }
-
-    protected function getWidgetConfig($widgetId)
-    {
-        $filename = sprintf('%s-config.yaml', $widgetId);
-        return $this->loadConfigFile($filename);
-    }
+//    protected function loadConfigFile($filename)
+//    {
+//        $configFilePath = "/usr/share/openmediavault/workbench/dashboard.d/" . $filename;
+//        return yaml_parse_file($configFilePath);
+//    }
+//
+//    protected function getWidgetConfig($widgetId)
+//    {
+//        $filename = sprintf('%s-config.yaml', $widgetId);
+//        return $this->loadConfigFile($filename);
+//    }
 
     public function getName()
     {
@@ -52,17 +52,8 @@ class OMVRpcServiceNvidiaUtil extends OMVRpcServiceAbstract
             "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits");
         $cmd = new \OMV\System\Process($gpuUtil);
         $cmd->execute($output, $exitStatus);
-        $widgetConfig = $this->getWidgetConfig('nvidia-gpu-util');
-        if (isset($widgetConfig['tuning'])) {
-            $threshold = $widgetConfig['tuning']['threshold'];
-            $currentUtil = intval($output[0]);
-            if ($currentUtil >= $threshold) {
-                // Add logic to handle high utilization (e.g., trigger an alert, optimize performance)
-                error_log(sprintf('GPU Utilization Alert: Current Utilization is %d which exceeds the threshold of %d', $currentUtil, $threshold));
-            }
-        }
         return [
-            "gpuUtil" => $currentUtil
+            "gpuUtil" => intval($output[0])
         ];
     }
 
@@ -71,12 +62,14 @@ class OMVRpcServiceNvidiaUtil extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);
         // get cpu temp command and divisor number
-        $gpuPower = \OMV\Environment::get("OMV_NVIDIA_GPU_POWER_COMMAND",
-            "nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits");
-        $cmd = new \OMV\System\Process($gpuPower);
+        $gpuPowerUtil = \OMV\Environment::get("OMV_NVIDIA_GPU_POWER_COMMAND",
+            "nvidia-smi --query-gpu=power.draw,power.limit --format=csv,noheader,nounits");
+        $cmd = new \OMV\System\Process($gpuPowerUtil);
         $cmd->execute($output, $exitStatus);
+        $splittedOutput = explode(",", $output[0]);
         return [
-            "gpuPower" => intval($output[0])
+            "gpuPowerDraw" => intval($splittedOutput[0]),
+            "gpuPowerLimit" => intval($splittedOutput[1])
         ];
     }
 
@@ -85,12 +78,15 @@ class OMVRpcServiceNvidiaUtil extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);
         // get cpu temp command and divisor number
-        $gpuMem = \OMV\Environment::get("OMV_NVIDIA_GPU_MEM_COMMAND",
-            "nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits");
-        $cmd = new \OMV\System\Process($gpuMem);
+        $gpuMemUtil = \OMV\Environment::get("OMV_NVIDIA_GPU_MEM_UTIL_COMMAND",
+            "nvidia-smi --query-gpu=memory.total,memory.free,memory.used --format=csv,noheader,nounits");
+        $cmd = new \OMV\System\Process($gpuMemUtil);
         $cmd->execute($output, $exitStatus);
+        $splittedOutput = explode(" ", $output[0]);
         return [
-            "gpuMem" => intval($output[0])
+            "gpuMemTotal" => intval($splittedOutput[0])*1048576, // 1048576 to convert MiB to Bytes
+            "gpuMemAvailable" => intval($splittedOutput[1])*1048576,
+            "gpuMem" => intval($splittedOutput[2])*1048576
         ];
     }
 
@@ -99,12 +95,12 @@ class OMVRpcServiceNvidiaUtil extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext($context, ["role" => OMV_ROLE_EVERYONE]);
         // get cpu temp command and divisor number
-        $gpuFan = \OMV\Environment::get("OMV_NVIDIA_GPU_FAN_COMMAND",
+        $gpuFanUtil = \OMV\Environment::get("OMV_NVIDIA_GPU_FAN_UTIL_COMMAND",
             "nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits");
-        $cmd = new \OMV\System\Process($gpuFan);
+        $cmd = new \OMV\System\Process($gpuFanUtil);
         $cmd->execute($output, $exitStatus);
         return [
-            "gpuFan" => intval($output[0])
+            "gpuFanUtil" => intval($output[0])
         ];
     }
 
@@ -118,7 +114,7 @@ class OMVRpcServiceNvidiaUtil extends OMVRpcServiceAbstract
         $gpuUtil = $this->getGpuUtil($param, $context)['gpuUtil'];
         $gpuPower = $this->getGpuPowerUtil($param, $context)['gpuPower'];
         $gpuMem = $this->getGpuMemUtil($param, $context)['gpuMem'];
-        $gpuFan = $this->getGpuFanUtil($param, $context)['gpuFan'];
+        $gpuFan = $this->getGpuFanUtil($param, $context)['gpuFanUtil'];
 
         // Assuming a single GPU for simplicity, in case of multiple GPUs, we need to handle that
         return [
