@@ -6,7 +6,7 @@ data:
     role:
       - admin
       - user
-  title: "Nvidia GPU Utilization"
+  title: "Nvidia GPU Status"
   type: datatable
   reloadPeriod: 5000
   datatable:
