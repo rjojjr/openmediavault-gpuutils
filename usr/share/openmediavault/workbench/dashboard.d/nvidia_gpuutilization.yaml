@@ -6,22 +6,21 @@ data:
     role:
       - admin
       - user
-  title: _("Nvidia GPU Utilization")
-  type: chart
+  title: "Nvidia GPU Utilization"
+  type: datatable
   reloadPeriod: 5000
-  chart:
-    type: gauge
-    maxHeight: "150px"
-    min: 0
-    max: 100
-    displayValue: true
+  datatable:
     request:
       service: NvidiaUtil
-      method: getGpuUtil
-    label:
-      formatter: template
-      formatterConfig: "{{ value | tofixed(1) }}%"
-    dataConfig:
-      - label: _("Utilization")
+      method: getAllGpuMetrics
+    columns:
+      - label: "GPU ID"
+        prop: gpuId
+      - label: "Utilization"
         prop: gpuUtil
-        backgroundColor: "#5dacdf"
+      - label: "Power"
+        prop: gpuPower
+      - label: "Memory"
+        prop: gpuMem
+      - label: "Fan Speed"
+        prop: gpuFan
