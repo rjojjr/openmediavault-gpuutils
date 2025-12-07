@@ -1,0 +1,40 @@
+# Added by scriptversion: "1.0"
+type: dashboard-widget
+data:
+  id: d9e3d245-f1a2-4441-9b5e-b7f66c2955f1
+  permissions:
+    role:
+      - admin
+      - user
+  title: _("Nvidia GPU Information")
+  type: datatable
+  reloadPeriod: 5000
+  datatable:
+    request:
+      service: NvidiaUtil
+      method: getAllGpuMetrics
+    columns:
+      - label: _("GPU ID")
+        prop: gpuId
+      - label: _("Name")
+        prop: gpuName
+      - label: _("Driver Version")
+        prop: gpuDriverVersion
+      - label: _("Vbios Version")
+        prop: gpuVbiosVersion
+      - label: _("PCI Bus ID")
+        prop: pciBusId
+      - label: _("Memory Usage")
+        formatter: template
+        formatterConfig: "{{ value.total / 1024 / 1024 | tofixed(2) }} MB used / {{ value.free / 1024 / 1024 | tofixed(2) }} MB free"
+        prop: gpuMemoryUsage
+      - label: _("Temperature")
+        formatter: template
+        formatterConfig: "{{ value | tofixed(1) }} °C"
+        prop: gpuTemp
+      - label: _("Utilization (%)")
+        formatter: template
+        formatterConfig: "GPU: {{ value.gpuUsage | tofixed(1) }}%\nMemory: {{ value.memoryUsage | tofixed(1) }}%"
+        prop: gpuUtil
+      - label: _("Fan Speed")
+        prop: gpuFanSpeed
