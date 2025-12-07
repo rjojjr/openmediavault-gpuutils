@@ -32,7 +32,7 @@ data:
         formatter: template
         formatterConfig: "{{ value | tofixed(1) }} C"
         prop: gpuTemp
-      - label: "_(Utilization (%))"
+      - label: "_(Utilization (\%))"
         prop: gpuUtil
-      - label: "_(Fan Speed (%))"
+      - label: "_(Fan Speed (\%))"
         prop: gpuFan
